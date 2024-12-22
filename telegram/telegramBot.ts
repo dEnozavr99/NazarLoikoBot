@@ -1,17 +1,20 @@
 import { Bot } from "grammy";
+import Groq from "groq-sdk";
+
+import NazarLoikoModel from "../model/model.ts";
 
 enum TelegramBotCommands {
   START = "start",
 }
 
-const createTelegramBot = (token: string): Bot => {
+const createTelegramBot = (token: string, qroq: Groq): Bot => {
   const bot = new Bot(token);
 
   bot.command(TelegramBotCommands.START, (context) =>
     context.reply("Hello! I am a Nazar Loiko!")
   );
 
-  bot.on("message", (context) => context.reply("Your mum :D"));
+  bot.on("message", async (context) => {});
 
   return bot;
 };
@@ -20,23 +23,35 @@ export { createTelegramBot };
 
 export class TelegramBotFactory {
   private static bot: Bot;
+  private static groq: Groq;
 
-  private static addCommands(bot: Bot) {
-    bot.command("start", (context) =>
+  private static addCommands() {
+    TelegramBotFactory.bot.command("start", (context) =>
       context.reply("Hello! I am a Nazar Loiko!")
     );
   }
 
-  private static addListeners(bot: Bot) {
-    bot.on("message", (context) => context.reply("Your mum :D"));
+  private static addListeners() {
+    TelegramBotFactory.bot.on("message", async (context) => {
+      const model = new NazarLoikoModel(TelegramBotFactory.groq);
+
+      let response = "Яйця :(";
+
+      if (context.message.text !== undefined) {
+        response = await model.respondToMessage(context.message.text);
+      }
+
+      context.reply(response);
+    });
   }
 
-  public buildBot(token: string): Bot {
-    const bot = new Bot(token);
+  public static buildBot(token: string, groqApiKey: string): Bot {
+    TelegramBotFactory.bot = new Bot(token);
+    TelegramBotFactory.groq = new Groq({ apiKey: groqApiKey });
 
-    TelegramBotFactory.addCommands(bot);
-    TelegramBotFactory.addListeners(bot);
+    TelegramBotFactory.addCommands();
+    TelegramBotFactory.addListeners();
 
-    return bot;
+    return TelegramBotFactory.bot;
   }
 }

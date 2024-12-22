@@ -1,1 +1,1 @@
-export { createTelegramBot } from "./telegramBot.ts";
+export { createTelegramBot, TelegramBotFactory } from "./telegramBot.ts";
