@@ -1,8 +1,11 @@
-export function add(a: number, b: number): number {
-  return a + b;
+import { Bot } from "grammy";
+
+const TOKEN = Deno.env.get("BOT_TOKEN");
+
+if (TOKEN === undefined) {
+  throw new Error("BOT_TOKEN is not set");
 }
 
-// Learn more at https://deno.land/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
-}
+const bot = new Bot(TOKEN);
+
+console.log("Bot is up and running!", bot);
