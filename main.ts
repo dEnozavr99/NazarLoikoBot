@@ -1,11 +1,13 @@
-import { Bot } from "grammy";
+import { createTelegramBot } from "./telegram/index.ts";
 
-const TOKEN = Deno.env.get("BOT_TOKEN");
+const TELEGRAM_BOT_TOKEN = Deno.env.get("BOT_TOKEN");
 
-if (TOKEN === undefined) {
+if (TELEGRAM_BOT_TOKEN === undefined) {
   throw new Error("BOT_TOKEN is not set");
 }
 
-const bot = new Bot(TOKEN);
+const telegramBot = createTelegramBot(TELEGRAM_BOT_TOKEN);
 
-console.log("Bot is up and running!", bot);
+console.log("Bot is up and running!", telegramBot);
+
+telegramBot.start();
