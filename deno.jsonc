@@ -4,6 +4,7 @@
     "start": "deno run --env-file --allow-import --allow-net --allow-env main.ts"
   },
   "imports": {
-    "grammy": "https://deno.land/x/grammy@v1.33.0/mod.ts"
+    "grammy": "https://deno.land/x/grammy@v1.33.0/mod.ts",
+    "groq-sdk": "npm:groq-sdk"
   }
 }
